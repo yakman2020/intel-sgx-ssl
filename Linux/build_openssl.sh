@@ -48,7 +48,7 @@ echo $OPENSSL_VERSION
 
 #Create required directories
 mkdir -p $SGXSSL_ROOT/package/include/openssl/
-mkdir -p $SGXSSL_ROOT/package/lib64/
+mkdir -p $SGXSSL_ROOT/package/lib/
 
 
 # build openssl modules, clean previous openssl dir if it exist
@@ -67,9 +67,9 @@ sed -i "/# define OPENSSL_assert/d" $OPENSSL_VERSION/include/openssl/crypto.h
 sed -i '/OPENSSL_die("assertion failed/d' $OPENSSL_VERSION/include/openssl/crypto.h
 fi
 
-OUTPUT_LIB=libsgx_tsgxssl_crypto.a
+OUTPUT_LIB=liboe_tssl_crypto.a
 if [[ $# -gt 0 ]] && [[ $1 == "debug" || $2 == "debug" || $3 == "debug" ]] ; then
-	OUTPUT_LIB=libsgx_tsgxssl_cryptod.a
+	OUTPUT_LIB=liboe_tssl_cryptod.a
     ADDITIONAL_CONF="-g "
 fi
 
@@ -77,9 +77,9 @@ sed -i -- 's/OPENSSL_issetugid/OPENSSLd_issetugid/g' $OPENSSL_VERSION/crypto/uid
 cp rand_lib.c $OPENSSL_VERSION/crypto/rand/rand_lib.c || exit 1
 
 cd $SGXSSL_ROOT/../openssl_source/$OPENSSL_VERSION || exit 1
-perl Configure linux-x86_64 --with-rand-seed=none $ADDITIONAL_CONF $SPACE_OPT no-idea no-mdc2 no-rc5 no-rc4 no-bf no-ec2m no-camellia no-cast no-srp no-hw no-dso no-shared no-ssl3 no-md2 no-md4 no-ui no-stdio no-afalgeng -D_FORTIFY_SOURCE=2 -DGETPID_IS_MEANINGLESS -include$SGXSSL_ROOT/../openssl_source/bypass_to_sgxssl.h --prefix=$OPENSSL_INSTALL_DIR || exit 1
+perl Configure linux-x86_64 --with-rand-seed=none $ADDITIONAL_CONF $SPACE_OPT no-idea no-mdc2 no-rc5 no-rc4 no-bf no-ec2m no-camellia no-cast no-srp no-hw no-dso no-shared no-ssl3 no-md2 no-md4 no-ui no-stdio no-afalgeng -D_FORTIFY_SOURCE=2 -DGETPID_IS_MEANINGLESS -include$SGXSSL_ROOT/../openssl_source/bypass_to_oessl.h --prefix=$OPENSSL_INSTALL_DIR || exit 1
 make build_generated libcrypto.a || exit 1
-cp libcrypto.a $SGXSSL_ROOT/package/lib64/$OUTPUT_LIB || exit 1
-objcopy --rename-section .init=Q6A8dc14f40efc4288a03b32cba4e $SGXSSL_ROOT/package/lib64/$OUTPUT_LIB || exit 1
+cp libcrypto.a $SGXSSL_ROOT/package/lib/$OUTPUT_LIB || exit 1
+objcopy --rename-section .init=Q6A8dc14f40efc4288a03b32cba4e $SGXSSL_ROOT/package/lib/$OUTPUT_LIB || exit 1
 cp include/openssl/* $SGXSSL_ROOT/package/include/openssl/ || exit 1
 exit 0

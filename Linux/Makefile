@@ -28,7 +28,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 #
-include sgx/buildenv.mk
+include openenclave/buildenv.mk
 LINUX_SGX_BUILD ?= 0
 
 .PHONY: clean install uninstall
@@ -36,23 +36,23 @@ LINUX_SGX_BUILD ?= 0
 
 
 all:
-	$(MAKE) -C sgx/ all
+	$(MAKE) -C openenclave/ all
 
 clean:
-	$(MAKE) -C sgx/ clean
+	$(MAKE) -C openenclave/ clean
 	rm -rf $(PACKAGE_LIB)/$(OPENSSL_LIB) $(PACKAGE_INC)/openssl/
 test:
-	$(MAKE) -C sgx/ test
+	$(MAKE) -C openenclave/ test
 
 install: $(PACKAGE_LIB)/$(TRUSTED_LIB) $(PACKAGE_LIB)/$(UNTRUSTED_LIB) $(PACKAGE_LIB)/$(OPENSSL_LIB)
 ifeq ($(DEBUG), 1)
 	@echo "WARNING: Installing Debug libraries."
 endif
-	mkdir -p $(DESTDIR)/lib64/
+	mkdir -p $(DESTDIR)/lib/
 	mkdir -p $(DESTDIR)/include/
-	cp $(PACKAGE_LIB)/$(OPENSSL_LIB) $(DESTDIR)/lib64/
-	cp $(PACKAGE_LIB)/$(TRUSTED_LIB) $(DESTDIR)/lib64/
-	cp $(PACKAGE_LIB)/$(UNTRUSTED_LIB) $(DESTDIR)/lib64/
+	cp $(PACKAGE_LIB)/$(OPENSSL_LIB) $(DESTDIR)/lib/
+	cp $(PACKAGE_LIB)/$(TRUSTED_LIB) $(DESTDIR)/lib/
+	cp $(PACKAGE_LIB)/$(UNTRUSTED_LIB) $(DESTDIR)/lib/
 	cp -prf $(PACKAGE_INC)/* $(DESTDIR)/include/
 
 uninstall:

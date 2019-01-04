@@ -48,7 +48,7 @@ all: $(PACKAGE_LIB)/$(OPENSSL_LIB)
 	$(MAKE) -C $(UNTRUSTED_LIB_DIR) all
 
 ifeq ($(LINUX_SGX_BUILD), 0)
-	$(MAKE) -C $(TEST_DIR) all
+#	$(MAKE) -C $(TEST_DIR) all
 endif
 
 $(PACKAGE_LIB)/$(OPENSSL_LIB):
@@ -58,9 +58,9 @@ $(PACKAGE_LIB)/$(OPENSSL_LIB):
 clean:	
 	$(MAKE) -C $(TRUSTED_LIB_DIR) clean
 	$(MAKE) -C $(UNTRUSTED_LIB_DIR) clean
-	$(MAKE) -C $(TEST_DIR) clean
+#	$(MAKE) -C $(TEST_DIR) clean
 	rm -f $(PACKAGE_LIB)/$(TRUSTED_LIB) $(PACKAGE_LIB)/$(UNTRUSTED_LIB)
 
 test: $(PACKAGE_LIB)/$(OPENSSL_LIB) all
-	$(MAKE) -C $(TEST_DIR) test 
+#	$(MAKE) -C $(TEST_DIR) test 
 

@@ -46,19 +46,20 @@ parent-dir = $(patsubst %/,%,$(dir $(1:%/=%)))
 my-dir = $(realpath $(call parent-dir,$(lastword $(MAKEFILE_LIST))))
 
 ROOT_DIR	:= $(call my-dir)
-export PACKAGE_LIB := $(ROOT_DIR)/../package/lib64/
+export PACKAGE_LIB := $(ROOT_DIR)/../package/lib/
 export PACKAGE_INC := $(ROOT_DIR)/../package/include/
-export TRUSTED_LIB_DIR := $(ROOT_DIR)/liboe_tsgxssl/
-export UNTRUSTED_LIB_DIR := $(ROOT_DIR)/liboe_usgxssl/
+export TRUSTED_LIB_DIR := $(ROOT_DIR)/liboe_tssl/
+export UNTRUSTED_LIB_DIR := $(ROOT_DIR)/liboe_ussl/
 export TEST_DIR := $(ROOT_DIR)/test_app/
 export OS_ID=0
 export LINUX_SGX_BUILD ?= 0
-export TRUSTED_LIB := liboe_tsgxssl.a
-export UNTRUSTED_LIB := liboe_usgxssl.a
+export TRUSTED_LIB := liboe_tssl.a
+export UNTRUSTED_LIB := liboe_ussl.a
 export VCC := @$(CC)
 export VCXX := @$(CXX)
 export OBJDIR := release
-DESTDIR ?= /opt/intel/sgxssl/
+export OE_SDK := /opt/openenclave
+DESTDIR ?= /opt/openenclave/lib/oessl/
 DEBUG ?= 0
 $(shell mkdir -p $(PACKAGE_LIB))
 UBUNTU_CONFNAME:=/usr/include/x86_64-linux-gnu/bits/confname.h
@@ -69,14 +70,14 @@ else
 endif
 ifeq ($(DEBUG), 1)
 	OBJDIR := debug
-	OPENSSL_LIB := liboe_tsgxssl_cryptod.a
-	TRUSTED_LIB := liboe_tsgxssld.a
-	UNTRUSTED_LIB := liboe_usgxssld.a
+	OPENSSL_LIB := liboe_tssl_cryptod.a
+	TRUSTED_LIB := liboe_tssld.a
+	UNTRUSTED_LIB := liboe_ussld.a
 else
 	OBJDIR := release
-	OPENSSL_LIB := liboe_tsgxssl_crypto.a
-	TRUSTED_LIB := liboe_tsgxssl.a
-	UNTRUSTED_LIB := liboe_usgxssl.a
+	OPENSSL_LIB := liboe_tssl_crypto.a
+	TRUSTED_LIB := liboe_tssl.a
+	UNTRUSTED_LIB := liboe_ussl.a
 endif
 
 ifeq ($(VERBOSE),1)

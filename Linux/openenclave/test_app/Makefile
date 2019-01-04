@@ -31,13 +31,13 @@
 include ../buildenv.mk
 
 all:
-	$(MAKE) -f sgx_u.mk LINUX_SGX_BUILD=$(LINUX_SGX_BUILD) all
-	$(MAKE) -f sgx_t.mk LINUX_SGX_BUILD=$(LINUX_SGX_BUILD) all
+	$(MAKE) -f oe_u.mk LINUX_SGX_BUILD=$(LINUX_SGX_BUILD) all
+	$(MAKE) -f oe_t.mk LINUX_SGX_BUILD=$(LINUX_SGX_BUILD) all
 
 test:
-	$(MAKE) -f sgx_u.mk test
+	$(MAKE) -f oe_u.mk test
 
 clean:
-	$(MAKE) -f sgx_u.mk clean
-	$(MAKE) -f sgx_t.mk clean
+	$(MAKE) -f oe_u.mk clean
+	$(MAKE) -f oe_t.mk clean
 
